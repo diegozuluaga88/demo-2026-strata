@@ -14,13 +14,21 @@ export interface DemoProfileContextType {
 export const DemoProfileContext = createContext<DemoProfileContextType | undefined>(undefined);
 
 export function DemoProfileProvider({ children }: { children: ReactNode }) {
-    // F85.1 · Diego 2026-08-21 · flipped default from 'acme' to 'dealer-a' so
-    // fresh sessions land on the Dealer A demo without a profile-switch step.
-    // Existing sessions keep whatever they had (fallback only kicks in when
-    // localStorage is empty).
-    const [activeProfileId, setActiveProfileId] = useState<DemoProfileId>(
-        () => (localStorage.getItem('demo-profile') as DemoProfileId) || 'dealer-a'
-    );
+    // TT.48.1 · Diego 2026-09-08 · flipped default to 'time-tracker' so fresh
+    // sessions land on the Wurkwel demo (current focus). Bumped the version
+    // marker so existing browsers with an older saved profile also reset once ·
+    // avoids Diego + stakeholders having to clear localStorage manually.
+    const DEFAULT_PROFILE_VERSION = '2026-09-08-tt'
+    const [activeProfileId, setActiveProfileId] = useState<DemoProfileId>(() => {
+        const savedVersion = localStorage.getItem('demo-profile-version')
+        const savedProfile = localStorage.getItem('demo-profile') as DemoProfileId | null
+        if (savedVersion === DEFAULT_PROFILE_VERSION && savedProfile) return savedProfile
+        return 'time-tracker'
+    })
+
+    useEffect(() => {
+        localStorage.setItem('demo-profile-version', DEFAULT_PROFILE_VERSION)
+    }, [])
 
     useEffect(() => {
         localStorage.setItem('demo-profile', activeProfileId);
