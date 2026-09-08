@@ -241,14 +241,14 @@ function App() {
   const isDealerA = demoProfile.id === 'dealer-a';
   const isTimeTracker = demoProfile.id === 'time-tracker';
   const getSimulationConfig = () => {
-    // Time Tracker (noTour) · appName/company shown en el navbar top-left ·
-    // pill central "Time Tracker" (parity visual con el standalone que
-    // renderea un big ⏱️ pill centrado). El mode-switch "My Timesheet /
-    // Team View" vive dentro del feature card, no en el navbar del host.
+    // Time Tracker (noTour) · pill central "Time Tracker" (parity visual con
+    // el standalone) · sin companyName porque es un prototype pattern y no
+    // un tenant real (TT.48.2). El mode-switch "My Timesheet / Team View"
+    // vive dentro del feature card, no en el navbar del host.
     if (isTimeTracker) {
       return {
         appName: 'Time Tracker',
-        companyName: demoProfile.companyName,
+        companyName: '',
         customNavigation: [
           { name: 'Time Tracker', page: 'time-tracker', icon: ClockIcon },
         ],

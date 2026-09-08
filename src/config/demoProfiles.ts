@@ -98,8 +98,11 @@ export const DEMO_PROFILES: DemoProfile[] = [
     {
         id: 'time-tracker',
         name: 'Time Tracker',
-        companyName: 'Wurkwel',
-        description: 'Designer week view + manager team utilization · Wurkwel-inspired',
+        // TT.48.2 · Diego 2026-09-08 · companyName intencionalmente vacío ·
+        // el navbar renderea solo el label 'Time Tracker' sin tenant debajo ·
+        // este demo es un prototype pattern, no un tenant real.
+        companyName: '',
+        description: 'Designer week view + manager team utilization',
         icon: '⏱️',
         steps: TIME_TRACKER_STEPS,
         stepBehavior: TIME_TRACKER_STEP_BEHAVIOR,
