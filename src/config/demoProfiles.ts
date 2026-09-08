@@ -19,6 +19,10 @@ import { CLC_STEPS, CLC_STEP_BEHAVIOR, CLC_STEP_MESSAGES, CLC_SELF_INDICATED } f
 // billing · Order entry/PO · Electronic ordering & ACK) · fuente en
 // scratchpad/dealer-a-notion/_SOT_dealer-a.md (1029 líneas · single source of truth)
 import { DEALER_A_STEPS, DEALER_A_STEP_BEHAVIOR, DEALER_A_STEP_MESSAGES, DEALER_A_SELF_INDICATED } from './profiles/dealer-a';
+// Time Tracker · Wurkwel · lifted standalone at `src/features/time-tracker/`
+// Registered as a noTour profile so the DemoSidebar/Spotlight overlay is
+// skipped · the app renders directly when picked from the navbar switcher.
+import { TIME_TRACKER_STEPS, TIME_TRACKER_STEP_BEHAVIOR, TIME_TRACKER_STEP_MESSAGES, TIME_TRACKER_SELF_INDICATED } from './profiles/time-tracker';
 
 export type SimulationApp =
     | 'dashboard' | 'expert-hub' | 'email-marketplace'
@@ -37,7 +41,9 @@ export type SimulationApp =
     | 'officeworks-sales'
     | 'clc-calendar' | 'clc-sharepoint' | 'clc-intake' | 'clc-dashboard'
     // F74 · Dealer A · 5 apps · 1 por flow
-    | 'dealer-a-bills' | 'dealer-a-vendor-onboarding' | 'dealer-a-billing' | 'dealer-a-order-po' | 'dealer-a-ack';
+    | 'dealer-a-bills' | 'dealer-a-vendor-onboarding' | 'dealer-a-billing' | 'dealer-a-order-po' | 'dealer-a-ack'
+    // Time Tracker · Wurkwel · single-app profile · renderea WeeklyGrid + TeamView
+    | 'time-tracker';
 
 export interface DemoStep {
     id: string;
@@ -61,7 +67,7 @@ export interface DemoStep {
         | 'dealer-a-bills' | 'dealer-a-vendor-onboarding' | 'dealer-a-billing' | 'dealer-a-order-po' | 'dealer-a-ack';
 }
 
-export type DemoProfileId = 'acme' | 'coi' | 'dupler' | 'ops' | 'continua' | 'wrg' | 'mbi' | 'leland' | 'bfi' | 'workspaces' | 'officeworks' | 'clc' | 'crm' | 'dealer-a';
+export type DemoProfileId = 'acme' | 'coi' | 'dupler' | 'ops' | 'continua' | 'wrg' | 'mbi' | 'leland' | 'bfi' | 'workspaces' | 'officeworks' | 'clc' | 'crm' | 'dealer-a' | 'time-tracker';
 
 export interface DemoProfile {
     id: DemoProfileId;
@@ -89,6 +95,19 @@ export interface DemoProfile {
 // Order: most recently created demo first (newest at top of Switch Demo dropdown).
 // To add a new demo, prepend its entry — do not append.
 export const DEMO_PROFILES: DemoProfile[] = [
+    {
+        id: 'time-tracker',
+        name: 'Time Tracker',
+        companyName: 'Wurkwel',
+        description: 'Designer week view + manager team utilization · Wurkwel-inspired',
+        icon: '⏱️',
+        steps: TIME_TRACKER_STEPS,
+        stepBehavior: TIME_TRACKER_STEP_BEHAVIOR,
+        stepMessages: TIME_TRACKER_STEP_MESSAGES,
+        selfIndicatedSteps: TIME_TRACKER_SELF_INDICATED,
+        noTour: true,
+        defaultPage: 'time-tracker',
+    },
     {
         id: 'dealer-a',
         name: 'Dealer A',

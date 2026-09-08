@@ -52,7 +52,9 @@ import OfficeworksPage, { OfficeworksDashboardPage } from "./components/officewo
 import CLCPage, { CLCDashboardPage } from "./components/clc/CLCPage"
 // F74 · Dealer A demo · shell + 5 placeholder scenes
 import DealerAPage from "./components/dealer-a/DealerAPage"
-import { Calculator as CalculatorIcon, Receipt as ReceiptIcon, FileSearch as FileSearchIcon, Palette as PaletteIcon, Sparkles as SparklesIcon, Mail as MailIcon, Database as DatabaseIcon, ShieldCheck as ShieldCheckIcon, Building2 as Building2Icon, LayoutDashboard as LayoutDashboardIcon, Inbox as InboxIcon, Pencil as PencilIcon, ClipboardCheck as ClipboardCheckIcon, Send as SendIcon, Calendar as CalendarIcon, Folder as FolderIcon, KanbanSquare as KanbanSquareIcon, BarChart3 as BarChart3Icon } from 'lucide-react'
+// Time Tracker (Wurkwel) · lifted at src/features/time-tracker/ · noTour profile
+import TimeTrackerApp from "./features/time-tracker/TimeTrackerApp"
+import { Calculator as CalculatorIcon, Receipt as ReceiptIcon, FileSearch as FileSearchIcon, Palette as PaletteIcon, Sparkles as SparklesIcon, Mail as MailIcon, Database as DatabaseIcon, ShieldCheck as ShieldCheckIcon, Building2 as Building2Icon, LayoutDashboard as LayoutDashboardIcon, Inbox as InboxIcon, Pencil as PencilIcon, ClipboardCheck as ClipboardCheckIcon, Send as SendIcon, Calendar as CalendarIcon, Folder as FolderIcon, KanbanSquare as KanbanSquareIcon, BarChart3 as BarChart3Icon, Clock as ClockIcon } from 'lucide-react'
 
 // Leland Demo — 4 app shells (Phase L0 · expanded in L1-L5)
 import { LelandStrataShell, LelandInboxApp, LelandSeradexApp, LelandReviewQueueApp } from "./features/leland"
@@ -90,7 +92,7 @@ function App() {
   const { user, initialLoading, signOut, showSessionWarning, refreshSession } = useAuth()
   const { isDemoActive, currentStep, isSidebarCollapsed, steps, goToStep, setIsDemoActive } = useDemo()
   const { activeProfile: demoProfile } = useDemoProfile()
-  const [currentPage, setCurrentPage] = useState<'dashboard' | 'detail' | 'quote-detail' | 'order-detail' | 'ack-detail' | 'ack-detail-ai' | 'workspace' | 'inventory' | 'catalogs' | 'mac' | 'transactions' | 'crm' | 'pricing'>('transactions')
+  const [currentPage, setCurrentPage] = useState<'dashboard' | 'detail' | 'quote-detail' | 'order-detail' | 'ack-detail' | 'ack-detail-ai' | 'workspace' | 'inventory' | 'catalogs' | 'mac' | 'transactions' | 'crm' | 'pricing' | 'time-tracker'>('transactions')
   // CRM view interno (Pipeline/Forecast/Design Intake) · controlado desde el
   // Navbar global vía customNavigation con pages 'crm:*'. CRM.tsx lo recibe
   // como prop para sincronizar con el activeTab del navbar.
@@ -237,7 +239,21 @@ function App() {
   const isOfficeworks = demoProfile.id === 'officeworks';
   const isClc = demoProfile.id === 'clc';
   const isDealerA = demoProfile.id === 'dealer-a';
+  const isTimeTracker = demoProfile.id === 'time-tracker';
   const getSimulationConfig = () => {
+    // Time Tracker (noTour) · appName/company shown en el navbar top-left ·
+    // pill central "Time Tracker" (parity visual con el standalone que
+    // renderea un big ⏱️ pill centrado). El mode-switch "My Timesheet /
+    // Team View" vive dentro del feature card, no en el navbar del host.
+    if (isTimeTracker) {
+      return {
+        appName: 'Time Tracker',
+        companyName: demoProfile.companyName,
+        customNavigation: [
+          { name: 'Time Tracker', page: 'time-tracker', icon: ClockIcon },
+        ],
+      };
+    }
     // CRM demo (noTour) · inyectar pills internas en el Navbar global ·
     // pages 'crm:*' interceptadas en handleNavigate para cambiar crmView.
     // Notes y Messages son icon-only placeholders (parity con standalone header) ·
@@ -685,6 +701,12 @@ function App() {
     // en el tour se define en Fase B.4 next iteration.
     if (isDealerA) {
       return <DealerAExpertHubWrapper />;
+    }
+    // Time Tracker (Wurkwel) · noTour profile · renderea directo al seleccionar
+    // desde el navbar switcher. defaultPage:'time-tracker' triggerea el effect
+    // que setea currentPage='time-tracker' y isDemoActive=false.
+    if (isTimeTracker) {
+      return <TimeTrackerApp />;
     }
     if (currentPage === 'dashboard') return <Dashboard onLogout={handleLogout} onNavigateToDetail={() => setCurrentPage('detail')} onNavigateToWorkspace={() => setCurrentPage('workspace')} onNavigate={handleNavigate} />;
     if (currentPage === 'inventory') return <Inventory onLogout={handleLogout} onNavigateToDetail={() => setCurrentPage('detail')} onNavigateToWorkspace={() => setCurrentPage('workspace')} onNavigate={handleNavigate} />;
